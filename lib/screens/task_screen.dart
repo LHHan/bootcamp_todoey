@@ -1,15 +1,20 @@
+import 'package:bootcamp_todoey/models/task.dart';
 import 'package:bootcamp_todoey/screens/add_task_screen.dart';
 import 'package:bootcamp_todoey/widgets/tasks_list.dart';
 import 'package:flutter/material.dart';
 
 class TaskScreen extends StatefulWidget {
-  const TaskScreen({Key? key}) : super(key: key);
-
   @override
   _TaskScreenState createState() => _TaskScreenState();
 }
 
 class _TaskScreenState extends State<TaskScreen> {
+  List<Task> tasks = [
+    Task(name: 'Buy milk'),
+    Task(name: 'Buy eggs'),
+    Task(name: 'Buy bread'),
+  ];
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -24,7 +29,16 @@ class _TaskScreenState extends State<TaskScreen> {
                 padding: EdgeInsets.only(
                   bottom: MediaQuery.of(context).viewInsets.bottom,
                 ),
-                child: AddTaskScreen(),
+                child: AddTaskScreen(
+                  addTaskCallback: (newTaskTitle) {
+                    setState(() {
+                      tasks.add(
+                        Task(name: newTaskTitle),
+                      );
+                    });
+                    Navigator.pop(context);
+                  },
+                ),
               ),
             ),
           );
@@ -67,7 +81,7 @@ class _TaskScreenState extends State<TaskScreen> {
                   height: 10.0,
                 ),
                 Text(
-                  '12 Tasks',
+                  '${tasks.length} Tasks',
                   style: TextStyle(
                     color: Colors.white,
                     fontSize: 18.0,
@@ -86,7 +100,9 @@ class _TaskScreenState extends State<TaskScreen> {
                   topRight: Radius.circular(20.0),
                 ),
               ),
-              child: TasksList(),
+              child: TasksList(
+                tasks: tasks,
+              ),
             ),
           ),
         ],
